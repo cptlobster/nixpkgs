@@ -23,7 +23,7 @@
 }:
 
 let
-  inherit (torch) cudaCapabilities cudaPackages cudaSupport;
+  inherit (torch) cudaCapabilities cudaPackages cudaSupport rocmSupport rocmtoolkit_joined;
 
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
@@ -43,7 +43,11 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     ninja
     which
   ]
-  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
+  ++ lib.optionals rocmSupport [
+    rocmtoolkit_joined
+    rocmPackages.clr # Added separately so setup hook applies
+  ];
 
   buildInputs = [
     libjpeg_turbo
@@ -86,7 +90,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     homepage = "https://pytorch.org/";
     changelog = "https://github.com/pytorch/vision/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
-    platforms = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;
+    platforms = with lib.platforms; linux ++ lib.optionals (!cudaSupport && !rocmSupport) darwin;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 })
