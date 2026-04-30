@@ -23,7 +23,7 @@
 }:
 
 let
-  inherit (torch) cudaCapabilities cudaPackages cudaSupport rocmSupport rocmtoolkit_joined;
+  inherit (torch) cudaCapabilities cudaPackages cudaSupport rocmPackages rocmSupport rocmtoolkit_joined;
 
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
