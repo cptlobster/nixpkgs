@@ -71,8 +71,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     FORCE_CUDA = 1;
   }
   // lib.optionalAttrs rocmSupport {
-    ROCM_PATH = ${rocmtoolkit_joined};
-    ROCM_SOURCE_DIR = ${rocmtoolkit_joined};
+    ROCM_PATH = "${rocmtoolkit_joined}";
+    ROCM_SOURCE_DIR = "${rocmtoolkit_joined}";
     PYTORCH_ROCM_ARCH = "${gpuTargetString}";
   }
 
