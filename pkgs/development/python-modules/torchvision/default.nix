@@ -23,7 +23,7 @@
 }:
 
 let
-  inherit (torch) cudaCapabilities cudaPackages cudaSupport rocmPackages rocmSupport rocmtoolkit_joined;
+  inherit (torch) cudaCapabilities cudaPackages cudaSupport rocmPackages rocmSupport rocmtoolkit_joined gpuTargetString;
 
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
@@ -69,7 +69,12 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   // lib.optionalAttrs cudaSupport {
     TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" cudaCapabilities}";
     FORCE_CUDA = 1;
-  };
+  }
+  // lib.optionalAttrs rocmSupport {
+    ROCM_PATH = ${rocmtoolkit_joined};
+    ROCM_SOURCE_DIR = ${rocmtoolkit_joined};
+    PYTORCH_ROCM_ARCH = "${gpuTargetString}";
+  }
 
   # tests download big datasets, models, require internet connection, etc.
   doCheck = false;
