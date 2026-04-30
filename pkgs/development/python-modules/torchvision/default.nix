@@ -74,7 +74,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     ROCM_PATH = "${rocmtoolkit_joined}";
     ROCM_SOURCE_DIR = "${rocmtoolkit_joined}";
     PYTORCH_ROCM_ARCH = "${gpuTargetString}";
-  }
+  };
 
   # tests download big datasets, models, require internet connection, etc.
   doCheck = false;
